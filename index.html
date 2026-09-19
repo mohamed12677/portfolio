@@ -13,7 +13,1056 @@
     --void:#0a0e14;
     --panel:#10161f;
     --panel-2:#141b26;
+    --line:#212b38;<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Salah — Penetration Tester</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<noscript><style>.reveal{ opacity:1 !important; transform:none !important; }</style></noscript>
+<style>
+  :root{
+    --void:#0a0e14;
+    --panel:#10161f;
+    --panel-2:#141b26;
     --line:#212b38;
+    --ink:#dce4ec;
+    --ink-dim:#7a8494;
+    --cyan:#4fd1c5;
+    --cyan-rgb:79,209,197;
+    --amber:#e8a33d;
+    --radius:3px;
+    --nav-bg:rgba(10,14,20,0.86);
+
+    --term-bg:#10161f;
+    --term-panel:#141b26;
+    --term-line:#212b38;
+    --term-text:#a9b4c2;
+    --term-dim:#7a8494;
+    --term-cyan:#4fd1c5;
+    --term-amber:#e8a33d;
+  }
+
+  body.theme-light{
+    --void:#f5f7fa;
+    --panel:#ffffff;
+    --panel-2:#eef1f5;
+    --line:#d9e0e7;
+    --ink:#12161c;
+    --ink-dim:#55606c;
+    --cyan:#0c8a83;
+    --cyan-rgb:12,138,131;
+    --amber:#a15f04;
+    --nav-bg:rgba(255,255,255,0.86);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    background:var(--void);
+    color:var(--ink);
+    font-family:'IBM Plex Sans','IBM Plex Sans Arabic',sans-serif;
+    line-height:1.7;
+    font-size:16px;
+    overflow-x:hidden;
+  }
+  body.lang-ar{ font-family:'IBM Plex Sans Arabic','IBM Plex Sans',sans-serif; }
+
+  #netBg{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    z-index:-1;
+    pointer-events:none;
+    display:block;
+  }
+  @media (prefers-reduced-motion: reduce){ #netBg{ display:none; } }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  a{ color:inherit; }
+  ::selection{ background:var(--cyan); color:var(--void); }
+
+  :focus-visible{
+    outline:2px solid var(--cyan);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--nav-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    color:var(--cyan);
+    white-space:nowrap;
+    text-decoration:none;
+  }
+  .brand::after{
+    content:'▌';
+    margin-inline-start:3px;
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  nav.links{
+    display:flex; gap:28px;
+    font-size:14.5px;
+  }
+  nav.links a{
+    text-decoration:none;
+    color:var(--ink-dim);
+    transition:color .15s ease;
+    padding:6px 2px;
+  }
+  nav.links a:hover{ color:var(--ink); }
+
+  .nav-right{ display:flex; align-items:center; gap:16px; }
+
+  button.lang-toggle{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--cyan);
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:7px 12px;
+    cursor:pointer;
+    letter-spacing:0.02em;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  button.lang-toggle:hover{ border-color:var(--cyan); background:rgba(79,209,197,0.06); }
+
+  .theme-btn{
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    display:inline-flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    padding:0;
+    background:#dfe3e6;
+    color:#22262c;
+    transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .theme-btn:hover{ transform:translateY(-1px); }
+  .theme-btn svg{ width:18px; height:18px; display:block; }
+  .theme-btn.is-light{
+    background:#171c24;
+    color:#f2b944;
+    border-color:#2a313c;
+  }
+
+  @media (max-width:720px){
+    nav.links{ display:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:76px 0 64px;
+  }
+  .terminal{
+    background:var(--term-bg);
+    border:1px solid var(--term-line);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.7);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 16px;
+    background:var(--term-panel);
+    border-bottom:1px solid var(--term-line);
+    direction:ltr;
+  }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#3a4453; }
+  .term-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--term-dim);
+    margin-inline-start:10px;
+  }
+  .term-body{
+    direction:ltr;
+    text-align:left;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    padding:22px 20px 26px;
+    color:var(--term-text);
+  }
+  .term-body .line{
+    opacity:0;
+    animation:reveal .4s ease forwards;
+    white-space:pre;
+  }
+  @keyframes reveal{ to{ opacity:1; } }
+  .term-body .l1{ animation-delay:.1s; }
+  .term-body .l2{ animation-delay:.5s; color:var(--term-dim); }
+  .term-body .l3{ animation-delay:.8s; }
+  .term-body .l4{ animation-delay:1.1s; height:8px; }
+  .term-body .l5{ animation-delay:1.3s; color:var(--term-dim); }
+  .term-body .l6{ animation-delay:1.55s; }
+  .term-body .l6 .svc{ color:var(--term-cyan); }
+  .term-body .l7{ animation-delay:1.75s; }
+  .term-body .l7 .svc{ color:var(--term-cyan); }
+  .term-body .l8{ animation-delay:1.95s; }
+  .term-body .l8 .svc{ color:var(--term-amber); }
+  .term-body .l9{ animation-delay:2.2s; height:8px; }
+  .term-body .l10{ animation-delay:2.35s; color:var(--term-dim); }
+  .cursor-line{ animation-delay:2.5s; }
+  .cursor{
+    display:inline-block; width:7px; height:14px;
+    background:var(--term-cyan); margin-inline-start:6px;
+    vertical-align:-2px;
+    animation:blink 1s steps(1) infinite;
+  }
+
+  .hero-foot{
+    text-align:center;
+    padding-top:46px;
+  }
+  .hero-foot h1{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(26px,4.4vw,40px);
+    letter-spacing:0.01em;
+    color:var(--ink);
+  }
+  .hero-foot h1 .accent{ color:var(--cyan); }
+  .tagline{
+    max-width:560px;
+    margin:18px auto 0;
+    color:var(--ink-dim);
+    font-size:17px;
+  }
+  .cta-row{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+    margin-top:32px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 24px;
+    border-radius:var(--radius);
+    text-decoration:none;
+    font-size:14.5px;
+    font-family:'IBM Plex Mono', monospace;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary{ background:var(--cyan); color:var(--void); font-weight:600; }
+  .btn-primary:hover{ transform:translateY(-1px); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--cyan); color:var(--cyan); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:88px 0; border-top:1px solid var(--line); }
+  section[id], #skills{ scroll-margin-top:84px; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--amber);
+    letter-spacing:0.04em;
+  }
+  h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:clamp(22px,3vw,28px);
+    margin-top:10px;
+    color:var(--ink);
+  }
+  .section-head{ margin-bottom:44px; max-width:620px; }
+  .lead{ color:var(--ink-dim); margin-top:14px; font-size:16px; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px;
+  }
+  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; gap:36px; } }
+  .about-text p{ color:var(--ink-dim); margin-bottom:16px; }
+  .usp{
+    margin-top:22px;
+    padding:18px 18px 18px 20px;
+    border-inline-start:3px solid var(--cyan);
+    background:var(--panel);
+    border-radius:0 var(--radius) var(--radius) 0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    color:var(--ink);
+    direction:ltr;
+    text-align:left;
+  }
+  body.lang-ar .usp{ direction:rtl; text-align:right; border-inline-start:3px solid var(--cyan); }
+  .usp .rem{ color:var(--ink-dim); }
+
+  .skill-level{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); }
+
+  /* ---------- SKILLS RADAR ---------- */
+  .radar-wrap{ display:flex; justify-content:center; margin-top:6px; }
+  .radar-svg{ width:100%; max-width:300px; height:auto; direction:ltr; }
+  .radar-grid{ fill:none; stroke:var(--line); stroke-width:1; }
+  .radar-axis{ stroke:var(--line); stroke-width:1; }
+  .radar-shape{ fill:rgba(var(--cyan-rgb),0.18); stroke:var(--cyan); stroke-width:2; }
+  .radar-dot{ fill:var(--cyan); }
+  .radar-label{ font-family:'IBM Plex Mono', monospace; font-size:10px; fill:var(--ink-dim); }
+  .radar-legend{ margin-top:20px; }
+  .radar-legend-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--line); font-size:14px;
+  }
+  .radar-legend-row:last-child{ border-bottom:none; }
+
+  /* ---------- SERVICES ---------- */
+  .svc-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:700px){ .svc-grid{ grid-template-columns:1fr; } }
+  .svc-card{
+    background:var(--void);
+    padding:28px 26px;
+  }
+  .svc-port{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--cyan);
+    letter-spacing:0.03em;
+  }
+  .svc-card h3{
+    font-size:17.5px; margin-top:10px; margin-bottom:8px; font-weight:600;
+  }
+  .svc-card p{ color:var(--ink-dim); font-size:14.5px; }
+  .svc-grid .svc-card:nth-child(1){ transition-delay:0s; }
+  .svc-grid .svc-card:nth-child(2){ transition-delay:.08s; }
+  .svc-grid .svc-card:nth-child(3){ transition-delay:.16s; }
+  .svc-grid .svc-card:nth-child(4){ transition-delay:.24s; }
+
+  /* ---------- PROCESS ---------- */
+  .process-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    position:relative;
+  }
+  @media (max-width:800px){ .process-row{ grid-template-columns:1fr; gap:30px; } }
+  .process-row::before{
+    content:'';
+    position:absolute; top:17px; left:12.5%; right:12.5%;
+    height:1px; background:var(--line);
+  }
+  @media (max-width:800px){ .process-row::before{ display:none; } }
+  .step{ position:relative; padding-inline-end:18px; }
+  .step-num{
+    width:34px; height:34px; border-radius:50%;
+    background:var(--void); border:1px solid var(--cyan); color:var(--cyan);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:13px;
+    position:relative; z-index:1;
+  }
+  .step h4{ margin-top:16px; font-size:15.5px; font-weight:600; }
+  .step p{ color:var(--ink-dim); font-size:14px; margin-top:8px; }
+  .process-row .step:nth-child(1){ transition-delay:0s; }
+  .process-row .step:nth-child(2){ transition-delay:.08s; }
+  .process-row .step:nth-child(3){ transition-delay:.16s; }
+  .process-row .step:nth-child(4){ transition-delay:.24s; }
+
+  /* ---------- CASES ---------- */
+  .case-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:700px){ .case-grid{ grid-template-columns:1fr; } }
+  .case-ghost{
+    border:1px dashed var(--line);
+    border-radius:6px;
+    padding:30px 24px;
+    color:var(--ink-dim);
+    font-size:14.5px;
+    min-height:150px;
+    display:flex; flex-direction:column; justify-content:center;
+    text-align:center;
+  }
+  .case-ghost .mark{ font-family:'IBM Plex Mono', monospace; color:var(--line); font-size:22px; margin-bottom:10px; }
+  .case-grid .case-ghost:nth-child(1){ transition-delay:0s; }
+  .case-grid .case-ghost:nth-child(2){ transition-delay:.1s; }
+  .case-card{
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:26px 24px;
+    background:var(--panel);
+  }
+  .case-tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--amber);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:3px 10px;
+    margin-bottom:12px;
+  }
+  .case-card h3{ font-size:16.5px; margin-bottom:8px; font-weight:600; }
+  .case-card p{ color:var(--ink-dim); font-size:14px; margin-bottom:16px; }
+  .case-card .btn{ font-size:13px; padding:9px 16px; }
+
+  /* ---------- INTERACTIVE LAB TERMINAL ---------- */
+  .lab-body{
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .lab-body .line{ white-space:pre-wrap; }
+  .lab-line{ margin-bottom:8px; }
+  .lab-line.cmd{ color:var(--term-cyan); }
+  .lab-line.resp{ color:var(--term-dim); }
+  .lab-input-row{
+    display:flex; align-items:center; gap:10px;
+    padding:12px 20px 20px;
+    border-top:1px solid var(--term-line);
+    direction:ltr;
+  }
+  .lab-prompt{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--term-cyan);
+    font-size:13.5px;
+    white-space:nowrap;
+  }
+  .lab-input{
+    flex:1; min-width:0;
+    background:transparent; border:none; outline:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    color:var(--term-text);
+    caret-color:var(--term-cyan);
+  }
+  .lab-input::placeholder{ color:var(--term-dim); font-weight:300; }
+  .lab-hint{
+    margin-top:14px; text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px; font-weight:300;
+    color:var(--ink-dim);
+    direction:ltr;
+  }
+  .case-cta{
+    grid-column:1 / -1;
+    text-align:center;
+    margin-top:6px;
+    padding:26px;
+    background:var(--panel);
+    border-radius:6px;
+  }
+  .case-cta p{ color:var(--ink-dim); margin-bottom:16px; }
+
+  /* ---------- CONTACT ---------- */
+  .contact-box{
+    text-align:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:56px 30px;
+  }
+  .contact-box h2{ margin-top:0; }
+  .contact-box .lead{ max-width:460px; margin-left:auto; margin-right:auto; }
+  .contact-meta{
+    display:flex; align-items:center; justify-content:center;
+    gap:14px; flex-wrap:wrap;
+    margin-top:22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+  }
+  .contact-meta a{
+    text-decoration:none; color:var(--ink-dim);
+    transition:color .15s ease;
+    direction:ltr;
+  }
+  .contact-meta a:hover{ color:var(--cyan); }
+  .contact-meta .sep{ color:var(--line); }
+
+  footer{
+    padding:32px 0;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-dim);
+    border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body class="lang-en">
+<canvas id="netBg" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand">salah@network:~$</a>
+    <nav class="links">
+      <a href="#lab" data-ar="جرّب بنفسك" data-en="Try it">جرّب بنفسك</a>
+      <a href="#about" data-ar="نبذة" data-en="About">نبذة</a>
+      <a href="#skills" data-ar="المهارات" data-en="Skills">المهارات</a>
+      <a href="#services" data-ar="الخدمات" data-en="Services">الخدمات</a>
+      <a href="#process" data-ar="طريقة العمل" data-en="Process">طريقة العمل</a>
+      <a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeToggle" type="button" data-current-theme="dark" aria-label="Toggle light/dark theme"></button>
+      <button class="lang-toggle" id="langToggle" type="button">--lang=ar</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="wrap">
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="term-title">nmap -sV -p- salah.network</span>
+        </div>
+        <div class="term-body">
+          <div class="line l1">$ nmap -sV -p- target.startup.io</div>
+          <div class="line l2">Starting Nmap 7.94 ( https://nmap.org )</div>
+          <div class="line l3">Host is up (0.011s latency).</div>
+          <div class="line l4">&nbsp;</div>
+          <div class="line l5">PORT      STATE   SERVICE</div>
+          <div class="line l6">22/tcp    open    <span class="svc">network-recon &amp; pentesting</span></div>
+          <div class="line l7">445/tcp   open    <span class="svc">nmap-driven-assessment</span></div>
+          <div class="line l8">8443/tcp  open    <span class="svc">web-testing (growing)</span></div>
+          <div class="line l9">&nbsp;</div>
+          <div class="line l10 cursor-line">Nmap done: 1 host up scanned in 0.42s<span class="cursor"></span></div>
+        </div>
+      </div>
+
+      <div class="hero-foot">
+        <h1><span data-ar="محمد" data-en="MOHAMED">MOHAMED</span> <span class="accent" data-ar="صلاح" data-en="“SALAH”">“SALAH”</span></h1>
+        <p class="tagline" data-ar="بساعد أصحاب الشركات الناشئة يأمّنوا شبكاتهم قبل ما حد تاني يلاقي الثغرة."
+           data-en="I help startup founders secure their networks before someone else finds the gap.">
+          I help startup founders secure their networks before someone else finds the gap.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/mohamed-salah-59a53126a/" target="_blank" rel="noopener"
+             data-ar="راسلني على LinkedIn" data-en="Message on LinkedIn">Message on LinkedIn</a>
+          <a class="btn btn-ghost" href="#services" data-ar="شوف الخدمات" data-en="View services">View services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE TERMINAL -->
+  <section id="lab" style="border-top:none;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="tag">01 // TRY IT</span>
+        <h2 data-ar="جرّب بنفسك" data-en="Try it yourself">Try it yourself</h2>
+        <p class="lead" data-ar="مش مجرد تصميم — ده terminal حقيقي شغال. اكتب أمر وشوف اللي هيحصل."
+           data-en="Not just decoration — this is a real, working terminal. Type a command and see what happens.">
+          Not just decoration — this is a real, working terminal. Type a command and see what happens.
+        </p>
+      </div>
+
+      <div class="terminal reveal">
+        <div class="term-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="term-title">salah@network:~$ interactive</span>
+        </div>
+        <div class="term-body lab-body" id="labOutput">
+          <div class="line lab-line resp" style="opacity:1;"
+               data-ar="أهلاً 👋 اكتب أمر زي help عشان تشوف اللي تقدر تعمله."
+               data-en="Welcome 👋 Type a command like help to see what you can do.">
+            Welcome 👋 Type a command like help to see what you can do.
+          </div>
+        </div>
+        <div class="lab-input-row">
+          <span class="lab-prompt">salah@network:~$</span>
+          <input type="text" id="labInput" class="lab-input" autocomplete="off" spellcheck="false"
+                 data-ar-ph="اكتب help وشوف..." data-en-ph="Type help to start..."
+                 placeholder="Type help to start...">
+        </div>
+      </div>
+      <p class="lab-hint reveal" data-ar="جرب: help · whoami · about · skills · services · contact · sudo hire-me · clear"
+         data-en="Try: help · whoami · about · skills · services · contact · sudo hire-me · clear">
+        Try: help · whoami · about · skills · services · contact · sudo hire-me · clear
+      </p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="reveal">
+        <span class="tag">02 // PROFILE</span>
+        <h2 data-ar="نبذة عني" data-en="About">About</h2>
+        <div class="about-text" style="margin-top:22px;">
+          <p data-ar="محمد صلاح، متخصص في اختبار الاختراق (Penetration Testing) بيركز بشكل أساسي على أمن الشبكات. شغال بارتياح في رسم خريطة البنية التحتية، اكتشاف الخدمات المكشوفة، والتحقق من مسارات هجوم حقيقية باستخدام أدوات زي Nmap."
+             data-en="Mohamed Salah is a penetration tester focused primarily on network security. Comfortable mapping infrastructure, uncovering exposed services, and validating real attack paths with tools like Nmap.">
+            Mohamed Salah is a penetration tester focused primarily on network security. Comfortable mapping infrastructure, uncovering exposed services, and validating real attack paths with tools like Nmap.
+          </p>
+          <p data-ar="وبيبني كمان خبرة عملية في اختبار تطبيقات الويب والاستغلال، خطوة بخطوة. بيشتغل عن قرب مع مؤسسي الشركات الناشئة اللي محتاجين اختبار أمني عملي وواضح، من غير تعقيد أو تكاليف الشركات الكبيرة."
+             data-en="Also building hands-on experience in web application testing and exploitation, one engagement at a time. Works closely with startup founders who need practical, no-nonsense security testing — without enterprise overhead.">
+            Also building hands-on experience in web application testing and exploitation, one engagement at a time. Works closely with startup founders who need practical, no-nonsense security testing — without enterprise overhead.
+          </p>
+        </div>
+        <div class="usp">
+          <span data-ar="بساعد مؤسسي الشركات الناشئة يحموا البنية التحتية بتاعتهم من خلال اختبار اختراق شبكات عملي ومباشر."
+                data-en="I help startup founders protect their infrastructure through hands-on, straightforward network penetration testing.">
+            I help startup founders protect their infrastructure through hands-on, straightforward network penetration testing.
+          </span>
+        </div>
+      </div>
+
+      <div id="skills" class="reveal">
+        <span class="tag">03 // SIGNAL</span>
+        <h2 data-ar="المهارات" data-en="Skills">Skills</h2>
+
+        <div class="radar-wrap">
+          <svg viewBox="0 0 300 300" class="radar-svg" role="img" aria-label="Skills radar chart">
+            <polygon points="150,122.5 177.5,150 150,177.5 122.5,150" class="radar-grid"></polygon>
+            <polygon points="150,95 205,150 150,205 95,150" class="radar-grid"></polygon>
+            <polygon points="150,67.5 232.5,150 150,232.5 67.5,150" class="radar-grid"></polygon>
+            <polygon points="150,40 260,150 150,260 40,150" class="radar-grid"></polygon>
+
+            <line x1="150" y1="150" x2="150" y2="40" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="260" y2="150" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="150" y2="260" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="40" y2="150" class="radar-axis"></line>
+
+            <polygon points="150,40 260,150 150,238 106,150" class="radar-shape"></polygon>
+            <circle cx="150" cy="40" r="4" class="radar-dot"></circle>
+            <circle cx="260" cy="150" r="4" class="radar-dot"></circle>
+            <circle cx="150" cy="238" r="4" class="radar-dot"></circle>
+            <circle cx="106" cy="150" r="4" class="radar-dot"></circle>
+
+            <text x="150" y="20" text-anchor="middle" class="radar-label"
+                  data-ar="اختبار اختراق الشبكات" data-en="Network Pentest">Network Pentest</text>
+            <text x="278" y="150" text-anchor="start" dominant-baseline="middle" class="radar-label">Nmap</text>
+            <text x="150" y="284" text-anchor="middle" class="radar-label"
+                  data-ar="تقييم الثغرات" data-en="Vuln Assessment">Vuln Assessment</text>
+            <text x="22" y="150" text-anchor="end" dominant-baseline="middle" class="radar-label"
+                  data-ar="اختبار الويب" data-en="Web Exploitation">Web Exploitation</text>
+          </svg>
+        </div>
+
+        <div class="radar-legend">
+          <div class="radar-legend-row">
+            <span data-ar="اختبار اختراق الشبكات" data-en="Network Penetration Testing">Network Penetration Testing</span>
+            <span class="skill-level" data-ar="قوي" data-en="Strong">Strong</span>
+          </div>
+          <div class="radar-legend-row">
+            <span>Nmap</span>
+            <span class="skill-level" data-ar="قوي" data-en="Strong">Strong</span>
+          </div>
+          <div class="radar-legend-row">
+            <span data-ar="تقييم الثغرات" data-en="Vulnerability Assessment">Vulnerability Assessment</span>
+            <span class="skill-level" data-ar="جيد" data-en="Solid">Solid</span>
+          </div>
+          <div class="radar-legend-row">
+            <span data-ar="اختبار واستغلال تطبيقات الويب" data-en="Web App Testing &amp; Exploitation">Web App Testing &amp; Exploitation</span>
+            <span class="skill-level" data-ar="في تطور" data-en="Growing">Growing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="tag">04 // SERVICES</span>
+        <h2 data-ar="إيه اللي بقدمه" data-en="What I offer">What I offer</h2>
+        <p class="lead" data-ar="خدمات أمنية عملية مصممة لسرعة وميزانية الشركات الناشئة."
+           data-en="Practical security services built for a startup's speed and budget.">
+          Practical security services built for a startup's speed and budget.
+        </p>
+      </div>
+
+      <div class="svc-grid">
+        <div class="svc-card reveal">
+          <span class="svc-port">PORT 22</span>
+          <h3 data-ar="اختبار اختراق الشبكات" data-en="Network Penetration Testing">Network Penetration Testing</h3>
+          <p data-ar="تقييمات داخلية وخارجية بترسم سطح الهجوم بتاعك وتكشف نقاط الضعف القابلة للاستغلال."
+             data-en="External and internal assessments that map your attack surface and expose exploitable weaknesses.">
+            External and internal assessments that map your attack surface and expose exploitable weaknesses.
+          </p>
+        </div>
+        <div class="svc-card reveal">
+          <span class="svc-port">PORT 445</span>
+          <h3 data-ar="استطلاع باستخدام Nmap" data-en="Nmap-Driven Reconnaissance">Nmap-Driven Reconnaissance</h3>
+          <p data-ar="فحص عميق للبورتات والخدمات يوضح بالظبط اللي متاح على الإنترنت، واللي المفروض يكون مخفي."
+             data-en="Deep port and service scanning that shows exactly what's exposed to the internet — and what shouldn't be.">
+            Deep port and service scanning that shows exactly what's exposed to the internet — and what shouldn't be.
+          </p>
+        </div>
+        <div class="svc-card reveal">
+          <span class="svc-port">PORT 8080</span>
+          <h3 data-ar="تقييم الثغرات" data-en="Vulnerability Assessment">Vulnerability Assessment</h3>
+          <p data-ar="مراجعة منظمة للنتائج، مرتبة حسب الخطورة الحقيقية على بيزنسك، مش بس أرقام CVSS."
+             data-en="A structured review of findings, prioritized by real-world business risk — not just CVSS scores.">
+            A structured review of findings, prioritized by real-world business risk — not just CVSS scores.
+          </p>
+        </div>
+        <div class="svc-card reveal">
+          <span class="svc-port">PORT 3000</span>
+          <h3 data-ar="استشارات أمنية للستارت أب" data-en="Startup Security Consulting">Startup Security Consulting</h3>
+          <p data-ar="إرشادات عملية للفرق الصغيرة، من غير تقارير متضخمة أو تسعير شركات كبيرة."
+             data-en="Practical guidance for lean teams — no bloated reports, no enterprise pricing.">
+            Practical guidance for lean teams — no bloated reports, no enterprise pricing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="tag">05 // METHOD</span>
+        <h2 data-ar="طريقة الشغل" data-en="How an engagement works">How an engagement works</h2>
+      </div>
+
+      <div class="process-row">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h4 data-ar="الاستطلاع والخريطة" data-en="Recon &amp; Mapping">Recon &amp; Mapping</h4>
+          <p data-ar="تحديد الأجهزة الشغالة، البورتات المفتوحة، والخدمات على شبكتك." data-en="Identify live hosts, open ports, and running services across your network.">Identify live hosts, open ports, and running services across your network.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <h4 data-ar="الفحص والتعداد" data-en="Scanning &amp; Enumeration">Scanning &amp; Enumeration</h4>
+          <p data-ar="نزول أعمق باستخدام Nmap لتحديد نوع الخدمات واكتشاف الأخطاء في الإعدادات." data-en="Dig deeper with Nmap to fingerprint services and surface misconfigurations.">Dig deeper with Nmap to fingerprint services and surface misconfigurations.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <h4 data-ar="التحقق" data-en="Validation">Validation</h4>
+          <p data-ar="تأكيد إن الثغرات فعلاً قابلة للاستغلال، مش مجرد نظرية." data-en="Confirm which weaknesses are actually exploitable, not just theoretical.">Confirm which weaknesses are actually exploitable, not just theoretical.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <h4 data-ar="التقرير" data-en="Reporting">Reporting</h4>
+          <p data-ar="تقرير واضح ومرتب حسب الأولوية يقدر فريقك ينفذه على طول." data-en="A clear, prioritized report your team can act on immediately.">A clear, prioritized report your team can act on immediately.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE STUDIES -->
+  <section id="cases">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="tag">06 // CASE STUDIES</span>
+        <h2 data-ar="مشاريع سابقة" data-en="Selected engagements">Selected engagements</h2>
+      </div>
+
+      <div class="case-grid">
+        <div class="case-ghost reveal">
+          <div class="mark">01</div>
+          <span data-ar="أول مشروع شغال حاليًا — التفاصيل هتتضاف بعد الانتهاء (مع مراعاة سرية العميل)."
+                data-en="First engagement in progress — details will be added on completion (client confidentiality respected).">
+            First engagement in progress — details will be added on completion (client confidentiality respected).
+          </span>
+        </div>
+        <div class="case-ghost reveal">
+          <div class="mark">02</div>
+          <span data-ar="مكان فاضي — لسه بستقبل أول عملاء الشركات الناشئة." data-en="Open slot — currently onboarding first startup clients.">
+            Open slot — currently onboarding first startup clients.
+          </span>
+        </div>
+        <div class="case-cta reveal">
+          <p data-ar="عايز شركتك الناشئة تكون أول case study هنا؟" data-en="Want your startup to be the first case study here?">
+            Want your startup to be the first case study here?
+          </p>
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/mohamed-salah-59a53126a/" target="_blank" rel="noopener"
+             data-ar="يلا نتكلم" data-en="Let's talk">Let's talk</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-box reveal">
+        <span class="tag">07 // CONTACT</span>
+        <h2 data-ar="عندك شبكة تستاهل تتفحص؟" data-en="Have a network worth testing?">Have a network worth testing?</h2>
+        <p class="lead" data-ar="كلمني على LinkedIn وهنتكلم عن احتياجاتك الأمنية." data-en="Message me on LinkedIn and let's talk about your security needs.">
+          Message me on LinkedIn and let's talk about your security needs.
+        </p>
+        <div class="cta-row" style="margin-top:26px;">
+          <a class="btn btn-primary" href="https://www.linkedin.com/in/mohamed-salah-59a53126a/" target="_blank" rel="noopener"
+             data-ar="تواصل معايا على LinkedIn" data-en="Connect on LinkedIn">Connect on LinkedIn</a>
+        </div>
+        <div class="contact-meta">
+          <a href="mailto:midoos2004@gmail.com">✉ midoos2004@gmail.com</a>
+          <span class="sep">/</span>
+          <a href="tel:+201018691219">📞 01018691219</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span data-ar="© 2026 محمد صلاح — Penetration Tester" data-en="© 2026 Mohamed Salah — Penetration Tester">© 2026 Mohamed Salah — Penetration Tester</span>
+</footer>
+
+<script>
+  // منع النزول التلقائي لأي قسم عند فتح الصفحة
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  var currentLang = 'en';
+
+  function applyLang(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('lang-ar', lang === 'ar');
+    document.body.classList.toggle('lang-en', lang === 'en');
+    document.querySelectorAll('[data-ar]').forEach(function(el){
+      var val = lang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+      if(val !== null){ el.textContent = val; }
+    });
+    document.querySelectorAll('[data-ar-ph]').forEach(function(el){
+      var val = lang === 'ar' ? el.getAttribute('data-ar-ph') : el.getAttribute('data-en-ph');
+      if(val !== null){ el.setAttribute('placeholder', val); }
+    });
+    document.getElementById('langToggle').textContent = lang === 'ar' ? '--lang=en' : '--lang=ar';
+    document.getElementById('langToggle').setAttribute('data-current', lang);
+  }
+
+  document.getElementById('langToggle').addEventListener('click', function(){
+    var current = document.getElementById('langToggle').getAttribute('data-current') || 'en';
+    applyLang(current === 'ar' ? 'en' : 'ar');
+  });
+
+  var MOON_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  var SUN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+
+  function applyTheme(theme){
+    document.body.classList.toggle('theme-light', theme === 'light');
+    var btn = document.getElementById('themeToggle');
+    btn.classList.toggle('is-light', theme === 'light');
+    btn.innerHTML = theme === 'light' ? SUN_ICON : MOON_ICON;
+    btn.setAttribute('data-current-theme', theme);
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    var current = document.getElementById('themeToggle').getAttribute('data-current-theme') || 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ---------- INTERACTIVE LAB TERMINAL ---------- */
+  var LAB_RESPONSES = {
+    ar: {
+      help: "الأوامر المتاحة:\nhelp          - عرض الأوامر\nwhoami        - مين أنا\nabout         - نبذة عني\nskills        - المهارات\nservices      - الخدمات\ncontact       - بيانات التواصل\nsudo hire-me  - ؟؟\nclear         - تنظيف الشاشة",
+      whoami: 'محمد "صلاح" — Penetration Tester | متخصص في أمن الشبكات',
+      about: "متخصص في اختبار الاختراق بيركز بشكل أساسي على أمن الشبكات، خبرة قوية في Nmap، وبيبني خبرة عملية في اختبار الويب والاستغلال.",
+      skills: "network-pentest ..... قوي\nnmap ................ قوي\nvuln-assessment ..... جيد\nweb-exploitation .... في تطور",
+      services: "1) اختبار اختراق الشبكات\n2) استطلاع باستخدام Nmap\n3) تقييم الثغرات\n4) استشارات أمنية للستارت أب",
+      contact: "linkedin: linkedin.com/in/mohamed-salah-59a53126a\nemail:    midoos2004@gmail.com\nphone:    01018691219",
+      hire: "Access granted. جاري تحويلك لصفحة التواصل...",
+      notfound: function(c){ return 'bash: ' + c + ': command not found — اكتب "help" لعرض الأوامر.'; }
+    },
+    en: {
+      help: "Available commands:\nhelp          - show this list\nwhoami        - who am I\nabout         - short bio\nskills        - skill levels\nservices      - what I offer\ncontact       - contact info\nsudo hire-me  - ??\nclear         - clear the screen",
+      whoami: 'Mohamed "Salah" — Penetration Tester | Network Security Specialist',
+      about: "Penetration tester focused primarily on network security, strong with Nmap, and building hands-on experience in web testing & exploitation.",
+      skills: "network-pentest ..... strong\nnmap ................ strong\nvuln-assessment ..... solid\nweb-exploitation .... growing",
+      services: "1) Network Penetration Testing\n2) Nmap-Driven Reconnaissance\n3) Vulnerability Assessment\n4) Startup Security Consulting",
+      contact: "linkedin: linkedin.com/in/mohamed-salah-59a53126a\nemail:    midoos2004@gmail.com\nphone:    01018691219",
+      hire: "Access granted. Redirecting you to the contact section...",
+      notfound: function(c){ return 'bash: ' + c + ': command not found — type "help" to see commands.'; }
+    }
+  };
+
+  function labPrint(text, cls){
+    var out = document.getElementById('labOutput');
+    var div = document.createElement('div');
+    div.className = 'line lab-line ' + (cls || '');
+    div.style.opacity = '1';
+    div.textContent = text;
+    out.appendChild(div);
+    out.scrollTop = out.scrollHeight;
+  }
+
+  function labRunCommand(raw){
+    var cmd = (raw || '').trim();
+    if(!cmd) return;
+    labPrint('salah@network:~$ ' + cmd, 'cmd');
+    var lower = cmd.toLowerCase();
+    var dict = LAB_RESPONSES[currentLang] || LAB_RESPONSES.ar;
+
+    if(lower === 'clear'){
+      document.getElementById('labOutput').innerHTML = '';
+      return;
+    }
+    if(lower === 'sudo hire-me'){
+      labPrint(dict.hire, 'resp');
+      setTimeout(function(){
+        var c = document.getElementById('contact');
+        if(c){ c.scrollIntoView({ behavior: 'smooth' }); }
+      }, 500);
+      return;
+    }
+    if(Object.prototype.hasOwnProperty.call(dict, lower)){
+      labPrint(dict[lower], 'resp');
+    } else {
+      labPrint(dict.notfound(cmd), 'resp');
+    }
+  }
+
+  var labInput = document.getElementById('labInput');
+  if(labInput){
+    labInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        labRunCommand(labInput.value);
+        labInput.value = '';
+      }
+    });
+  }
+
+  // تشغيل اللغة والتايم الافتراضي
+  applyLang('en');
+  applyTheme('dark');
+
+  /* ---------- NETWORK BACKGROUND ---------- */
+  (function(){
+    var canvas = document.getElementById('netBg');
+    if(!canvas || !canvas.getContext) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion) return;
+
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var COUNT = 46;
+    var MAX_DIST = 130;
+    var vw, vh;
+
+    function resize(){
+      var dpr = window.devicePixelRatio || 1;
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+      canvas.width = vw * dpr;
+      canvas.height = vh * dpr;
+      canvas.style.width = vw + 'px';
+      canvas.style.height = vh + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function initParticles(){
+      particles = [];
+      for(var i = 0; i < COUNT; i++){
+        particles.push({
+          x: Math.random() * vw,
+          y: Math.random() * vh,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25
+        });
+      }
+    }
+
+    function step(){
+      ctx.clearRect(0, 0, vw, vh);
+      var i, j, p, a, b, dx, dy, dist, alpha;
+
+      for(i = 0; i < particles.length; i++){
+        p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if(p.x < 0 || p.x > vw) p.vx *= -1;
+        if(p.y < 0 || p.y > vh) p.vy *= -1;
+      }
+
+      for(i = 0; i < particles.length; i++){
+        for(j = i + 1; j < particles.length; j++){
+          a = particles[i];
+          b = particles[j];
+          dx = a.x - b.x;
+          dy = a.y - b.y;
+          dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < MAX_DIST){
+            alpha = (1 - dist / MAX_DIST) * 0.35;
+            ctx.strokeStyle = 'rgba(127,148,168,' + alpha + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for(i = 0; i < particles.length; i++){
+        p = particles[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(127,148,168,0.55)';
+        ctx.fill();
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    window.addEventListener('resize', function(){
+      resize();
+      initParticles();
+    });
+
+    resize();
+    initParticles();
+    requestAnimationFrame(step);
+  })();
+
+  /* ---------- SCROLL REVEAL (تم تعديلها لتتكرر مع النزول والصعود) ---------- */
+  (function(){
+    var revealEls = document.querySelectorAll('.reveal');
+    if(!revealEls.length) return;
+
+    if(!('IntersectionObserver' in window)){
+      revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+        } else {
+          entry.target.classList.remove('is-visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
     --ink:#dce4ec;
     --ink-dim:#7a8494;
     --cyan:#4fd1c5;
