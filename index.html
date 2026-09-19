@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<noscript><style>.reveal{ opacity:1 !important; transform:none !important; }</style></noscript>
 <style>
   :root{
     --void:#0a0e14;
@@ -16,6 +17,7 @@
     --ink:#dce4ec;
     --ink-dim:#7a8494;
     --cyan:#4fd1c5;
+    --cyan-rgb:79,209,197;
     --amber:#e8a33d;
     --radius:3px;
     --nav-bg:rgba(10,14,20,0.86);
@@ -38,6 +40,7 @@
     --ink:#12161c;
     --ink-dim:#55606c;
     --cyan:#0c8a83;
+    --cyan-rgb:12,138,131;
     --amber:#a15f04;
     --nav-bg:rgba(255,255,255,0.86);
   }
@@ -59,6 +62,25 @@
     overflow-x:hidden;
   }
   body.lang-en{ font-family:'IBM Plex Sans','IBM Plex Sans Arabic',sans-serif; }
+
+  #netBg{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    z-index:-1;
+    pointer-events:none;
+    display:block;
+  }
+  @media (prefers-reduced-motion: reduce){ #netBg{ display:none; } }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
 
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
@@ -286,18 +308,22 @@
   body.lang-ar .usp{ direction:rtl; text-align:right; border-inline-start:3px solid var(--cyan); }
   .usp .rem{ color:var(--ink-dim); }
 
-  .skill{ margin-bottom:20px; }
-  .skill-top{
-    display:flex; justify-content:space-between; align-items:baseline;
-    margin-bottom:8px; font-size:14.5px;
-  }
   .skill-level{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); }
-  .bars{ display:flex; gap:4px; direction:ltr; }
-  .bars span{
-    height:8px; flex:1; background:var(--line); border-radius:1px;
+
+  /* ---------- SKILLS RADAR ---------- */
+  .radar-wrap{ display:flex; justify-content:center; margin-top:6px; }
+  .radar-svg{ width:100%; max-width:300px; height:auto; direction:ltr; }
+  .radar-grid{ fill:none; stroke:var(--line); stroke-width:1; }
+  .radar-axis{ stroke:var(--line); stroke-width:1; }
+  .radar-shape{ fill:rgba(var(--cyan-rgb),0.18); stroke:var(--cyan); stroke-width:2; }
+  .radar-dot{ fill:var(--cyan); }
+  .radar-label{ font-family:'IBM Plex Mono', monospace; font-size:10px; fill:var(--ink-dim); }
+  .radar-legend{ margin-top:20px; }
+  .radar-legend-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--line); font-size:14px;
   }
-  .bars span.filled{ background:var(--cyan); }
-  .bars.amber span.filled{ background:var(--amber); }
+  .radar-legend-row:last-child{ border-bottom:none; }
 
   /* ---------- SERVICES ---------- */
   .svc-grid{
@@ -320,6 +346,10 @@
     font-size:17.5px; margin-top:10px; margin-bottom:8px; font-weight:600;
   }
   .svc-card p{ color:var(--ink-dim); font-size:14.5px; }
+  .svc-grid .svc-card:nth-child(1){ transition-delay:0s; }
+  .svc-grid .svc-card:nth-child(2){ transition-delay:.08s; }
+  .svc-grid .svc-card:nth-child(3){ transition-delay:.16s; }
+  .svc-grid .svc-card:nth-child(4){ transition-delay:.24s; }
 
   /* ---------- PROCESS ---------- */
   .process-row{
@@ -343,6 +373,10 @@
   }
   .step h4{ margin-top:16px; font-size:15.5px; font-weight:600; }
   .step p{ color:var(--ink-dim); font-size:14px; margin-top:8px; }
+  .process-row .step:nth-child(1){ transition-delay:0s; }
+  .process-row .step:nth-child(2){ transition-delay:.08s; }
+  .process-row .step:nth-child(3){ transition-delay:.16s; }
+  .process-row .step:nth-child(4){ transition-delay:.24s; }
 
   /* ---------- CASES ---------- */
   .case-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
@@ -358,6 +392,8 @@
     text-align:center;
   }
   .case-ghost .mark{ font-family:'IBM Plex Mono', monospace; color:var(--line); font-size:22px; margin-bottom:10px; }
+  .case-grid .case-ghost:nth-child(1){ transition-delay:0s; }
+  .case-grid .case-ghost:nth-child(2){ transition-delay:.1s; }
   .case-card{
     border:1px solid var(--line);
     border-radius:6px;
@@ -461,16 +497,17 @@
 </style>
 </head>
 <body class="lang-ar">
+<canvas id="netBg" aria-hidden="true"></canvas>
 
 <header class="nav">
   <div class="wrap nav-inner">
     <a href="#" class="brand">salah@network:~$</a>
     <nav class="links">
+      <a href="#lab" data-ar="جرّب بنفسك" data-en="Try it">جرّب بنفسك</a>
       <a href="#about" data-ar="نبذة" data-en="About">نبذة</a>
       <a href="#skills" data-ar="المهارات" data-en="Skills">المهارات</a>
       <a href="#services" data-ar="الخدمات" data-en="Services">الخدمات</a>
       <a href="#process" data-ar="طريقة العمل" data-en="Process">طريقة العمل</a>
-      <a href="#lab" data-ar="جرّب بنفسك" data-en="Try it">جرّب بنفسك</a>
       <a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
     </nav>
     <div class="nav-right">
@@ -518,11 +555,49 @@
     </div>
   </section>
 
+  <!-- INTERACTIVE TERMINAL -->
+  <section id="lab" style="border-top:none;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="tag">01 // TRY IT</span>
+        <h2 data-ar="جرّب بنفسك" data-en="Try it yourself">جرّب بنفسك</h2>
+        <p class="lead" data-ar="مش مجرد تصميم — ده terminal حقيقي شغال. اكتب أمر وشوف اللي هيحصل."
+           data-en="Not just decoration — this is a real, working terminal. Type a command and see what happens.">
+          مش مجرد تصميم — ده terminal حقيقي شغال. اكتب أمر وشوف اللي هيحصل.
+        </p>
+      </div>
+
+      <div class="terminal reveal">
+        <div class="term-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="term-title">salah@network:~$ interactive</span>
+        </div>
+        <div class="term-body lab-body" id="labOutput">
+          <div class="line lab-line resp" style="opacity:1;"
+               data-ar="أهلاً 👋 اكتب أمر زي help عشان تشوف اللي تقدر تعمله."
+               data-en="Welcome 👋 Type a command like help to see what you can do.">
+            أهلاً 👋 اكتب أمر زي help عشان تشوف اللي تقدر تعمله.
+          </div>
+        </div>
+        <div class="lab-input-row">
+          <span class="lab-prompt">salah@network:~$</span>
+          <input type="text" id="labInput" class="lab-input" autocomplete="off" spellcheck="false"
+                 data-ar-ph="اكتب help وشوف..." data-en-ph="Type help to start..."
+                 placeholder="اكتب help وشوف...">
+        </div>
+      </div>
+      <p class="lab-hint reveal" data-ar="جرب: help · whoami · about · skills · services · contact · sudo hire-me · clear"
+         data-en="Try: help · whoami · about · skills · services · contact · sudo hire-me · clear">
+        جرب: help · whoami · about · skills · services · contact · sudo hire-me · clear
+      </p>
+    </div>
+  </section>
+
   <!-- ABOUT -->
   <section id="about">
     <div class="wrap about-grid">
-      <div>
-        <span class="tag">01 // PROFILE</span>
+      <div class="reveal">
+        <span class="tag">02 // PROFILE</span>
         <h2 data-ar="نبذة عني" data-en="About">نبذة عني</h2>
         <div class="about-text" style="margin-top:22px;">
           <p data-ar="محمد صلاح، متخصص في اختبار الاختراق (Penetration Testing) بيركز بشكل أساسي على أمن الشبكات. شغال بارتياح في رسم خريطة البنية التحتية، اكتشاف الخدمات المكشوفة، والتحقق من مسارات هجوم حقيقية باستخدام أدوات زي Nmap."
@@ -542,43 +617,55 @@
         </div>
       </div>
 
-      <div id="skills">
-        <span class="tag">02 // SIGNAL</span>
+      <div id="skills" class="reveal">
+        <span class="tag">03 // SIGNAL</span>
         <h2 data-ar="المهارات" data-en="Skills">المهارات</h2>
-        <div style="margin-top:26px;">
 
-          <div class="skill">
-            <div class="skill-top">
-              <span data-ar="اختبار اختراق الشبكات" data-en="Network Penetration Testing">اختبار اختراق الشبكات</span>
-              <span class="skill-level" data-ar="قوي" data-en="Strong">قوي</span>
-            </div>
-            <div class="bars"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span></div>
+        <div class="radar-wrap">
+          <svg viewBox="0 0 300 300" class="radar-svg" role="img" aria-label="Skills radar chart">
+            <polygon points="150,122.5 177.5,150 150,177.5 122.5,150" class="radar-grid"></polygon>
+            <polygon points="150,95 205,150 150,205 95,150" class="radar-grid"></polygon>
+            <polygon points="150,67.5 232.5,150 150,232.5 67.5,150" class="radar-grid"></polygon>
+            <polygon points="150,40 260,150 150,260 40,150" class="radar-grid"></polygon>
+
+            <line x1="150" y1="150" x2="150" y2="40" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="260" y2="150" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="150" y2="260" class="radar-axis"></line>
+            <line x1="150" y1="150" x2="40" y2="150" class="radar-axis"></line>
+
+            <polygon points="150,40 260,150 150,238 106,150" class="radar-shape"></polygon>
+            <circle cx="150" cy="40" r="4" class="radar-dot"></circle>
+            <circle cx="260" cy="150" r="4" class="radar-dot"></circle>
+            <circle cx="150" cy="238" r="4" class="radar-dot"></circle>
+            <circle cx="106" cy="150" r="4" class="radar-dot"></circle>
+
+            <text x="150" y="20" text-anchor="middle" class="radar-label"
+                  data-ar="اختبار اختراق الشبكات" data-en="Network Pentest">اختبار اختراق الشبكات</text>
+            <text x="278" y="150" text-anchor="start" dominant-baseline="middle" class="radar-label">Nmap</text>
+            <text x="150" y="284" text-anchor="middle" class="radar-label"
+                  data-ar="تقييم الثغرات" data-en="Vuln Assessment">تقييم الثغرات</text>
+            <text x="22" y="150" text-anchor="end" dominant-baseline="middle" class="radar-label"
+                  data-ar="اختبار الويب" data-en="Web Exploitation">اختبار الويب</text>
+          </svg>
+        </div>
+
+        <div class="radar-legend">
+          <div class="radar-legend-row">
+            <span data-ar="اختبار اختراق الشبكات" data-en="Network Penetration Testing">اختبار اختراق الشبكات</span>
+            <span class="skill-level" data-ar="قوي" data-en="Strong">قوي</span>
           </div>
-
-          <div class="skill">
-            <div class="skill-top">
-              <span>Nmap</span>
-              <span class="skill-level" data-ar="قوي" data-en="Strong">قوي</span>
-            </div>
-            <div class="bars"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span></div>
+          <div class="radar-legend-row">
+            <span>Nmap</span>
+            <span class="skill-level" data-ar="قوي" data-en="Strong">قوي</span>
           </div>
-
-          <div class="skill">
-            <div class="skill-top">
-              <span data-ar="تقييم الثغرات" data-en="Vulnerability Assessment">تقييم الثغرات</span>
-              <span class="skill-level" data-ar="جيد" data-en="Solid">جيد</span>
-            </div>
-            <div class="bars"><span class="filled"></span><span class="filled"></span><span class="filled"></span><span class="filled"></span><span></span></div>
+          <div class="radar-legend-row">
+            <span data-ar="تقييم الثغرات" data-en="Vulnerability Assessment">تقييم الثغرات</span>
+            <span class="skill-level" data-ar="جيد" data-en="Solid">جيد</span>
           </div>
-
-          <div class="skill">
-            <div class="skill-top">
-              <span data-ar="اختبار واستغلال تطبيقات الويب" data-en="Web App Testing &amp; Exploitation">اختبار واستغلال تطبيقات الويب</span>
-              <span class="skill-level" data-ar="في تطور" data-en="Growing">في تطور</span>
-            </div>
-            <div class="bars amber"><span class="filled"></span><span class="filled"></span><span></span><span></span><span></span></div>
+          <div class="radar-legend-row">
+            <span data-ar="اختبار واستغلال تطبيقات الويب" data-en="Web App Testing &amp; Exploitation">اختبار واستغلال تطبيقات الويب</span>
+            <span class="skill-level" data-ar="في تطور" data-en="Growing">في تطور</span>
           </div>
-
         </div>
       </div>
     </div>
@@ -587,8 +674,8 @@
   <!-- SERVICES -->
   <section id="services">
     <div class="wrap">
-      <div class="section-head">
-        <span class="tag">03 // SERVICES</span>
+      <div class="section-head reveal">
+        <span class="tag">04 // SERVICES</span>
         <h2 data-ar="إيه اللي بقدمه" data-en="What I offer">إيه اللي بقدمه</h2>
         <p class="lead" data-ar="خدمات أمنية عملية مصممة لسرعة وميزانية الشركات الناشئة."
            data-en="Practical security services built for a startup's speed and budget.">
@@ -597,7 +684,7 @@
       </div>
 
       <div class="svc-grid">
-        <div class="svc-card">
+        <div class="svc-card reveal">
           <span class="svc-port">PORT 22</span>
           <h3 data-ar="اختبار اختراق الشبكات" data-en="Network Penetration Testing">اختبار اختراق الشبكات</h3>
           <p data-ar="تقييمات داخلية وخارجية بترسم سطح الهجوم بتاعك وتكشف نقاط الضعف القابلة للاستغلال."
@@ -605,7 +692,7 @@
             تقييمات داخلية وخارجية بترسم سطح الهجوم بتاعك وتكشف نقاط الضعف القابلة للاستغلال.
           </p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card reveal">
           <span class="svc-port">PORT 445</span>
           <h3 data-ar="استطلاع باستخدام Nmap" data-en="Nmap-Driven Reconnaissance">استطلاع باستخدام Nmap</h3>
           <p data-ar="فحص عميق للبورتات والخدمات يوضح بالظبط اللي متاح على الإنترنت، واللي المفروض يكون مخفي."
@@ -613,7 +700,7 @@
             فحص عميق للبورتات والخدمات يوضح بالظبط اللي متاح على الإنترنت، واللي المفروض يكون مخفي.
           </p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card reveal">
           <span class="svc-port">PORT 8080</span>
           <h3 data-ar="تقييم الثغرات" data-en="Vulnerability Assessment">تقييم الثغرات</h3>
           <p data-ar="مراجعة منظمة للنتائج، مرتبة حسب الخطورة الحقيقية على بيزنسك، مش بس أرقام CVSS."
@@ -621,7 +708,7 @@
             مراجعة منظمة للنتائج، مرتبة حسب الخطورة الحقيقية على بيزنسك، مش بس أرقام CVSS.
           </p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card reveal">
           <span class="svc-port">PORT 3000</span>
           <h3 data-ar="استشارات أمنية للستارت أب" data-en="Startup Security Consulting">استشارات أمنية للستارت أب</h3>
           <p data-ar="إرشادات عملية للفرق الصغيرة، من غير تقارير متضخمة أو تسعير شركات كبيرة."
@@ -636,28 +723,28 @@
   <!-- PROCESS -->
   <section id="process">
     <div class="wrap">
-      <div class="section-head">
-        <span class="tag">04 // METHOD</span>
+      <div class="section-head reveal">
+        <span class="tag">05 // METHOD</span>
         <h2 data-ar="طريقة الشغل" data-en="How an engagement works">طريقة الشغل</h2>
       </div>
 
       <div class="process-row">
-        <div class="step">
+        <div class="step reveal">
           <div class="step-num">01</div>
           <h4 data-ar="الاستطلاع والخريطة" data-en="Recon &amp; Mapping">الاستطلاع والخريطة</h4>
           <p data-ar="تحديد الأجهزة الشغالة، البورتات المفتوحة، والخدمات على شبكتك." data-en="Identify live hosts, open ports, and running services across your network.">تحديد الأجهزة الشغالة، البورتات المفتوحة، والخدمات على شبكتك.</p>
         </div>
-        <div class="step">
+        <div class="step reveal">
           <div class="step-num">02</div>
           <h4 data-ar="الفحص والتعداد" data-en="Scanning &amp; Enumeration">الفحص والتعداد</h4>
           <p data-ar="نزول أعمق باستخدام Nmap لتحديد نوع الخدمات واكتشاف الأخطاء في الإعدادات." data-en="Dig deeper with Nmap to fingerprint services and surface misconfigurations.">نزول أعمق باستخدام Nmap لتحديد نوع الخدمات واكتشاف الأخطاء في الإعدادات.</p>
         </div>
-        <div class="step">
+        <div class="step reveal">
           <div class="step-num">03</div>
           <h4 data-ar="التحقق" data-en="Validation">التحقق</h4>
           <p data-ar="تأكيد إن الثغرات فعلاً قابلة للاستغلال، مش مجرد نظرية." data-en="Confirm which weaknesses are actually exploitable, not just theoretical.">تأكيد إن الثغرات فعلاً قابلة للاستغلال، مش مجرد نظرية.</p>
         </div>
-        <div class="step">
+        <div class="step reveal">
           <div class="step-num">04</div>
           <h4 data-ar="التقرير" data-en="Reporting">التقرير</h4>
           <p data-ar="تقرير واضح ومرتب حسب الأولوية يقدر فريقك ينفذه على طول." data-en="A clear, prioritized report your team can act on immediately.">تقرير واضح ومرتب حسب الأولوية يقدر فريقك ينفذه على طول.</p>
@@ -666,48 +753,10 @@
     </div>
   </section>
 
-  <!-- INTERACTIVE TERMINAL -->
-  <section id="lab">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="tag">05 // TRY IT</span>
-        <h2 data-ar="جرّب بنفسك" data-en="Try it yourself">جرّب بنفسك</h2>
-        <p class="lead" data-ar="مش مجرد تصميم — ده terminal حقيقي شغال. اكتب أمر وشوف اللي هيحصل."
-           data-en="Not just decoration — this is a real, working terminal. Type a command and see what happens.">
-          مش مجرد تصميم — ده terminal حقيقي شغال. اكتب أمر وشوف اللي هيحصل.
-        </p>
-      </div>
-
-      <div class="terminal">
-        <div class="term-bar">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="term-title">salah@network:~$ interactive</span>
-        </div>
-        <div class="term-body lab-body" id="labOutput">
-          <div class="line lab-line resp" style="opacity:1;"
-               data-ar="أهلاً 👋 اكتب أمر زي help عشان تشوف اللي تقدر تعمله."
-               data-en="Welcome 👋 Type a command like help to see what you can do.">
-            أهلاً 👋 اكتب أمر زي help عشان تشوف اللي تقدر تعمله.
-          </div>
-        </div>
-        <div class="lab-input-row">
-          <span class="lab-prompt">salah@network:~$</span>
-          <input type="text" id="labInput" class="lab-input" autocomplete="off" spellcheck="false"
-                 data-ar-ph="اكتب help وشوف..." data-en-ph="Type help to start..."
-                 placeholder="اكتب help وشوف...">
-        </div>
-      </div>
-      <p class="lab-hint" data-ar="جرب: help · whoami · about · skills · services · contact · ls · sudo hire-me · clear"
-         data-en="Try: help · whoami · about · skills · services · contact · ls · sudo hire-me · clear">
-        جرب: help · whoami · about · skills · services · contact · ls · sudo hire-me · clear
-      </p>
-    </div>
-  </section>
-
   <!-- CASE STUDIES -->
   <section id="cases">
     <div class="wrap">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="tag">06 // CASE STUDIES</span>
         <h2 data-ar="مشاريع سابقة" data-en="Selected engagements">مشاريع سابقة</h2>
       </div>
@@ -731,20 +780,20 @@
       -->
 
       <div class="case-grid">
-        <div class="case-ghost">
+        <div class="case-ghost reveal">
           <div class="mark">01</div>
           <span data-ar="أول مشروع شغال حاليًا — التفاصيل هتتضاف بعد الانتهاء (مع مراعاة سرية العميل)."
                 data-en="First engagement in progress — details will be added on completion (client confidentiality respected).">
             أول مشروع شغال حاليًا — التفاصيل هتتضاف بعد الانتهاء (مع مراعاة سرية العميل).
           </span>
         </div>
-        <div class="case-ghost">
+        <div class="case-ghost reveal">
           <div class="mark">02</div>
           <span data-ar="مكان فاضي — لسه بستقبل أول عملاء الشركات الناشئة." data-en="Open slot — currently onboarding first startup clients.">
             مكان فاضي — لسه بستقبل أول عملاء الشركات الناشئة.
           </span>
         </div>
-        <div class="case-cta">
+        <div class="case-cta reveal">
           <p data-ar="عايز شركتك الناشئة تكون أول case study هنا؟" data-en="Want your startup to be the first case study here?">
             عايز شركتك الناشئة تكون أول case study هنا؟
           </p>
@@ -758,7 +807,7 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="wrap">
-      <div class="contact-box">
+      <div class="contact-box reveal">
         <span class="tag">07 // CONTACT</span>
         <h2 data-ar="عندك شبكة تستاهل تتفحص؟" data-en="Have a network worth testing?">عندك شبكة تستاهل تتفحص؟</h2>
         <p class="lead" data-ar="كلمني على LinkedIn وهنتكلم عن احتياجاتك الأمنية." data-en="Message me on LinkedIn and let's talk about your security needs.">
@@ -827,24 +876,22 @@
   /* ---------- INTERACTIVE LAB TERMINAL ---------- */
   var LAB_RESPONSES = {
     ar: {
-      help: "الأوامر المتاحة:\nhelp          - عرض الأوامر\nwhoami        - مين أنا\nabout         - نبذة عني\nskills        - المهارات\nservices      - الخدمات\ncontact       - بيانات التواصل\nls            - أقسام الموقع\nsudo hire-me  - ؟؟\nclear         - تنظيف الشاشة",
+      help: "الأوامر المتاحة:\nhelp          - عرض الأوامر\nwhoami        - مين أنا\nabout         - نبذة عني\nskills        - المهارات\nservices      - الخدمات\ncontact       - بيانات التواصل\nsudo hire-me  - ؟؟\nclear         - تنظيف الشاشة",
       whoami: 'محمد "صلاح" — Penetration Tester | متخصص في أمن الشبكات',
       about: "متخصص في اختبار الاختراق بيركز بشكل أساسي على أمن الشبكات، خبرة قوية في Nmap، وبيبني خبرة عملية في اختبار الويب والاستغلال.",
       skills: "network-pentest ..... قوي\nnmap ................ قوي\nvuln-assessment ..... جيد\nweb-exploitation .... في تطور",
       services: "1) اختبار اختراق الشبكات\n2) استطلاع باستخدام Nmap\n3) تقييم الثغرات\n4) استشارات أمنية للستارت أب",
       contact: "linkedin: linkedin.com/in/mohamed-salah-59a53126a\nemail:    midoos2004@gmail.com\nphone:    01018691219",
-      ls: "about/  skills/  services/  process/  lab/  cases/  contact/",
       hire: "Access granted. جاري تحويلك لصفحة التواصل...",
       notfound: function(c){ return 'bash: ' + c + ': command not found — اكتب "help" لعرض الأوامر.'; }
     },
     en: {
-      help: "Available commands:\nhelp          - show this list\nwhoami        - who am I\nabout         - short bio\nskills        - skill levels\nservices      - what I offer\ncontact       - contact info\nls            - site sections\nsudo hire-me  - ??\nclear         - clear the screen",
+      help: "Available commands:\nhelp          - show this list\nwhoami        - who am I\nabout         - short bio\nskills        - skill levels\nservices      - what I offer\ncontact       - contact info\nsudo hire-me  - ??\nclear         - clear the screen",
       whoami: 'Mohamed "Salah" — Penetration Tester | Network Security Specialist',
       about: "Penetration tester focused primarily on network security, strong with Nmap, and building hands-on experience in web testing & exploitation.",
       skills: "network-pentest ..... strong\nnmap ................ strong\nvuln-assessment ..... solid\nweb-exploitation .... growing",
       services: "1) Network Penetration Testing\n2) Nmap-Driven Reconnaissance\n3) Vulnerability Assessment\n4) Startup Security Consulting",
       contact: "linkedin: linkedin.com/in/mohamed-salah-59a53126a\nemail:    midoos2004@gmail.com\nphone:    01018691219",
-      ls: "about/  skills/  services/  process/  lab/  cases/  contact/",
       hire: "Access granted. Redirecting you to the contact section...",
       notfound: function(c){ return 'bash: ' + c + ': command not found — type "help" to see commands.'; }
     }
@@ -898,6 +945,116 @@
 
   applyLang('ar');
   applyTheme('dark');
+
+  /* ---------- NETWORK BACKGROUND ---------- */
+  (function(){
+    var canvas = document.getElementById('netBg');
+    if(!canvas || !canvas.getContext) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion) return;
+
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var COUNT = 46;
+    var MAX_DIST = 130;
+    var vw, vh;
+
+    function resize(){
+      var dpr = window.devicePixelRatio || 1;
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+      canvas.width = vw * dpr;
+      canvas.height = vh * dpr;
+      canvas.style.width = vw + 'px';
+      canvas.style.height = vh + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function initParticles(){
+      particles = [];
+      for(var i = 0; i < COUNT; i++){
+        particles.push({
+          x: Math.random() * vw,
+          y: Math.random() * vh,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25
+        });
+      }
+    }
+
+    function step(){
+      ctx.clearRect(0, 0, vw, vh);
+      var i, j, p, a, b, dx, dy, dist, alpha;
+
+      for(i = 0; i < particles.length; i++){
+        p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if(p.x < 0 || p.x > vw) p.vx *= -1;
+        if(p.y < 0 || p.y > vh) p.vy *= -1;
+      }
+
+      for(i = 0; i < particles.length; i++){
+        for(j = i + 1; j < particles.length; j++){
+          a = particles[i];
+          b = particles[j];
+          dx = a.x - b.x;
+          dy = a.y - b.y;
+          dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < MAX_DIST){
+            alpha = (1 - dist / MAX_DIST) * 0.35;
+            ctx.strokeStyle = 'rgba(127,148,168,' + alpha + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for(i = 0; i < particles.length; i++){
+        p = particles[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(127,148,168,0.55)';
+        ctx.fill();
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    window.addEventListener('resize', function(){
+      resize();
+      initParticles();
+    });
+
+    resize();
+    initParticles();
+    requestAnimationFrame(step);
+  })();
+
+  /* ---------- SCROLL REVEAL ---------- */
+  (function(){
+    var revealEls = document.querySelectorAll('.reveal');
+    if(!revealEls.length) return;
+
+    if(!('IntersectionObserver' in window)){
+      revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(function(el){ io.observe(el); });
+  })();
 </script>
 
 </body>
